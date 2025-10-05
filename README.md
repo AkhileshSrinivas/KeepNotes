@@ -14,27 +14,23 @@ This project follows a modular and production-ready folder structure for easy fu
 - Environment-based configuration
 
 ---
+## **Create Virtual Environment & Install Dependencies**
+python -m venv venv
+source venv/bin/activate   # (Linux/Mac)
+venv\Scripts\activate      # (Windows)
 
-## 📂 Project Structure
+pip install -r requirements.txt
 
-keep-notes-backend/
-│── app/
-│ ├── index.py
-│ ├── run_server.py
-│ ├── db/
-│ │ ├── database.py
-| ├── managers
-| | ├──users.py
-│ ├── schemas/ # Pydantic models
-│ │ ├── note.py
-│ │ ├── register.py
-│ │ ├── token.py
-│ ├── services/ # Business logic layer
-│ │ ├── user_service.py
-│ │ ├── note_service.py
-│ ├── tests/ # Unit tests
-│ │ ├── test_users.py
-│ │ ├── test_notes.py
-│── requirements.txt
-│── README.md
-│── .env
+## **Setup Environment Variables**
+DATABASE_URL=mysql+pymysql://<db_user>:<db_password>@localhost:3306/keepnotes
+SECRET_KEY=your-secret-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+## Run Database Migrations 
+CREATE DATABASE keepnotes;
+python -m app.db.database
+
+## Start FastAPI Server
+cd app
+python run_server
