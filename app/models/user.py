@@ -1,25 +1,20 @@
 """
 Module: User Entity Transformation
 
-This module provides utility functions for transforming MongoDB 
+This module provides utility functions for transforming Mysql DB.
 user entities into Python dictionaries. It includes error handling 
 for document field mismatches and supports both single and bulk transformations.
 
 Dependencies:
 - FastAPI: For raising HTTP exceptions in case of errors.
-- Logging: For logging error messages.
 """
 
 import logging
 from fastapi import HTTPException
 
-# Set up a logger for the module
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
 handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 class UserEntityTransformer:
     """
@@ -30,23 +25,20 @@ class UserEntityTransformer:
     @staticmethod
     def user_entity(item: dict) -> dict:
         """
-        Convert a MongoDB user document into a dictionary.
+        Convert a Mysql DB user document into a dictionary.
 
         Args:
-            item (dict): A MongoDB user document.
+            item (dict): A Mysql DB user document.
 
         Returns:
             dict: A dictionary containing user details such as id, name, email, password, 
                   role, and added date.
 
         Raises:
-            HTTPException: If there is a mismatch in the MongoDB document structure 
+            HTTPException: If there is a mismatch in the Mysql DB document structure 
                            (e.g., missing fields).
         """
         try:
-            # Log the item for debugging purposes
-            logger.debug("Transforming user entity: %s", item)
-
             return {
                 "id": str(item.user_id),
                 "name": item.user_name,
@@ -57,15 +49,11 @@ class UserEntityTransformer:
             }
 
         except KeyError as e:
-            # Log the error and raise an HTTP exception for missing fields
-            logger.error("KeyError: %s. Missing key in MongoDB user document.", str(e))
             raise HTTPException(
                 status_code=500,
-                detail="Key or field mismatch in MongoDB document!"
+                detail="Key or field mismatch in Mysql DB document!"
             ) from e
         except Exception as e:
-            # Log any unexpected errors
-            logger.error("Unexpected error: %s", str(e))
             raise HTTPException(
                 status_code=500,
                 detail="An unexpected error occurred during user entity transformation!"
@@ -74,10 +62,10 @@ class UserEntityTransformer:
     @staticmethod
     def users_entity(entity: list) -> list:
         """
-        Convert a list of MongoDB user documents into a list of dictionaries.
+        Convert a list of Mysql DB user documents into a list of dictionaries.
 
         Args:
-            entity (list): A list of MongoDB user documents.
+            entity (list): A list of Mysql DB user documents.
 
         Returns:
             list: A list of dictionaries, each containing user details.
@@ -89,9 +77,7 @@ class UserEntityTransformer:
             # Apply transformation to each user document in the list
             return [UserEntityTransformer.user_entity(item) for item in entity]
         except Exception as e:
-            # Log any error during bulk transformation
-            logger.error("Error processing user items from MongoDB: %s", str(e))
             raise HTTPException(
                 status_code=500,
-                detail="Failed to process user items from MongoDB!"
+                detail="Failed to process user items from Mysql DB!"
             ) from e

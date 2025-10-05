@@ -35,9 +35,6 @@ auth_router = APIRouter(
     tags=["Authentication"]
 )
 
-# Configure logging
-logger = logging.getLogger(__name__)
-
 @auth_router.post("/login_page")
 async def generate_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)) -> Token:
     """
@@ -64,21 +61,14 @@ async def generate_access_token(form_data: OAuth2PasswordRequestForm = Depends()
         user = await FetchService.get_user_by_email(form_data.username, db)
 
         if not user:
-            logger.warning("Invalid login attempt: User does not exist - %s", form_data.username)
             raise HTTPException(status_code=400, detail="Invalid username or password!")
 
-        # Log a warning if the user does not exist or if the credentials are invalid
         try:
             # Validate the user's password using a secure hash verification method
             if not AuthService.verify_password(form_data.password, user["password"]):
-                logger.warning("Invalid login attempt: Incorrect password - %s", form_data.username)
                 raise HTTPException(status_code=400, detail="Invalid username or password!")
 
         except Exception as verify_error:
-            logger.error(
-                "Password verification failed for user: %s. Error: %s", 
-                form_data.username, str(verify_error)
-            )
             raise HTTPException(
                 status_code=400,
                 detail="Invalid username or password!"
@@ -99,8 +89,6 @@ async def generate_access_token(form_data: OAuth2PasswordRequestForm = Depends()
 
     except Exception as e:
         print(e)
-        # Log unexpected errors and raise a 500 status code
-        logger.error("Unexpected error during token generation: %s", str(e), exc_info=True)
         raise HTTPException(status_code=500, detail="Internal Server Error") from e
 
 @auth_router.post("/signup_page", response_model=dict)
