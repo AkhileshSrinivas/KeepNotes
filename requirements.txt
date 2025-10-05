@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+python-jose
+# passlib[bcrypt]
+pwdlib[argon2]
+pydantic
+python-dotenv
+pydantic[email]
+python-decouple
+python-multipart
