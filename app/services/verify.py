@@ -14,7 +14,6 @@ Dependencies:
 - Pydantic models: For type validation of user and token data.
 """
 from typing import Annotated
-import logging
 from pydantic import ValidationError
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer
@@ -32,7 +31,6 @@ class AuthUsers:
     """
 
     # Class-level variables
-    logger = logging.getLogger(__name__)
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/Homepage/login_page")
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
