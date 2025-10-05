@@ -19,7 +19,7 @@ class Settings:
 
     # JWT settings
     SECRET_KEY: str = os.getenv("SECRET_KEY")
-    ALGORITHM: str = os.getenv("HS256")
+    ALGORITHM: str = os.getenv("ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("TIME_LIMIT")
 
 settings = Settings()

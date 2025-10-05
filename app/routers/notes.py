@@ -10,7 +10,7 @@ from schemas import note
 from services.verify import AuthUsers
 
 note_router = APIRouter(
-    tags=["Notebox window"]
+    tags=["Keep Notes"]
 )
 
 # ---------------- CREATE NOTE ----------------

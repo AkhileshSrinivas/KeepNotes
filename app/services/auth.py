@@ -96,6 +96,7 @@ class AuthService:
             encoded_token = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
             return encoded_token
         except Exception as e:
+            print(e)
             raise HTTPException(status_code=500, detail="Failed to create access token") from e
 
     @staticmethod
