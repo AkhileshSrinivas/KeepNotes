@@ -9,6 +9,9 @@ class NoteBase(BaseModel):
     note_title: str
     note_content: str | None = None
 
+class NoteUpdate(BaseModel):
+    note_content: str | None = None
+
 class NoteResponse(NoteBase):
     note_id: str
     user_id: str

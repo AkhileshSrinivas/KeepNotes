@@ -44,7 +44,7 @@ def get_notes(
 @note_router.put("/update_note/{note_id}", response_model=dict)
 def update_note(
     note_id: str,
-    updated_note: note.NoteBase,
+    updated_note: note.NoteUpdate,
     current_user: dict = Depends(AuthUsers.get_current_user),
     db: Session = Depends(database.get_db)
 ):
@@ -54,8 +54,6 @@ def update_note(
 
     if not note_obj:
         raise HTTPException(status_code=404, detail="Note not found or not authorized")
-
-    note_obj.note_title = updated_note.note_title
     note_obj.note_content = updated_note.note_content
 
     db.commit()
