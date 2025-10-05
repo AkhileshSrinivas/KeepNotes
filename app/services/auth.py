@@ -20,7 +20,7 @@ Dependencies:
 
 Configuration:
 - SECRET_KEY: The secret key used for signing JWT tokens.
-- ALGORITHM: The algorithm used for signing JWT tokens (e.g., HS256).
+- ALGORITHM: The algorithm used for signing JWT tokens.
 """
 
 import logging
@@ -39,14 +39,8 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-# Secret key for JWT token signing
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-
 # Password hashing context
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 password_hash = PasswordHash.recommended()
-
 
 class AuthService:
     """Service class for authentication-related utilities."""
@@ -67,7 +61,6 @@ class AuthService:
         """
         try:
             logger.info("Hashing password")
-            # return pwd_context.hash(password)
             return password_hash.hash(password)
         except Exception as e:
             logger.error("Failed to hash password: %s",e)
@@ -90,7 +83,6 @@ class AuthService:
         """
         try:
             logger.info("Verifying password")
-            # return pwd_context.verify(plain_password, hashed_password)
             return password_hash.verify(plain_password, hashed_password)
         except Exception as e:
             logger.error("Failed to verify password: %s", e)

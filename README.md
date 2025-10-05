@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📝 Keep Notes API (FastAPI + MySQL + JWT)
 
 A scalable backend API for a **Keep Notes** application built using **FastAPI**, **SQLAlchemy (MySQL)**, and **JWT authentication**.  
@@ -84,4 +83,4 @@ This project follows a modular and production-ready folder structure for easy fu
 ## Start FastAPI Server
 - cd app
 - python run_server
->>>>>>> c8337322ddf9dd1df682ff86cc97a759226165d8
+
