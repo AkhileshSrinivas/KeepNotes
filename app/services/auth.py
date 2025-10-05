@@ -31,14 +31,6 @@ from pwdlib import PasswordHash
 from fastapi import HTTPException
 from services.config import settings
 
-# Set up a logger for the module
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
 # Password hashing context
 password_hash = PasswordHash.recommended()
 
@@ -60,10 +52,8 @@ class AuthService:
             HTTPException: If there is an error while hashing the password.
         """
         try:
-            logger.info("Hashing password")
             return password_hash.hash(password)
         except Exception as e:
-            logger.error("Failed to hash password: %s",e)
             raise HTTPException(status_code=500, detail="Failed to hash password") from e
 
     @staticmethod
@@ -82,10 +72,8 @@ class AuthService:
             HTTPException: If there is an error while verifying the password.
         """
         try:
-            logger.info("Verifying password")
             return password_hash.verify(plain_password, hashed_password)
         except Exception as e:
-            logger.error("Failed to verify password: %s", e)
             raise HTTPException(status_code=500, detail="Failed to verify password") from e
 
     @staticmethod
@@ -104,15 +92,12 @@ class AuthService:
             HTTPException: If there is an error while creating the access token.
         """
         try:
-            logger.info("Creating access token")
             to_encode = data.copy()
             expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
             to_encode.update({"exp": expire})
             encoded_token = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
-            logger.info("Access token created successfully")
             return encoded_token
         except Exception as e:
-            logger.error("Failed to create access token: %s", e)
             raise HTTPException(status_code=500, detail="Failed to create access token") from e
 
     @staticmethod
@@ -130,13 +115,9 @@ class AuthService:
             HTTPException: If the token is invalid or expired.
         """
         try:
-            logger.info("Decoding access token")
             decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-            logger.info("Token decoded successfully")
             return decoded_token
         except jwt.ExpiredSignatureError as e:
-            logger.error("Token expired: %s", e)
             raise HTTPException(status_code=401, detail="Token expired") from e
         except jwt.InvalidTokenError as e:
-            logger.error("Invalid token: %s", e)
             raise HTTPException(status_code=401, detail="Invalid token") from e
