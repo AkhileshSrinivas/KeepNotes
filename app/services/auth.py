@@ -23,7 +23,6 @@ Configuration:
 - ALGORITHM: The algorithm used for signing JWT tokens.
 """
 
-import logging
 from datetime import datetime, timedelta, timezone
 from jose import jwt
 # from passlib.context import CryptContext
